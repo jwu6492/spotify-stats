@@ -6,8 +6,8 @@ import { Buffer } from "buffer";
 import axios from "axios";
 import qs from "qs";
 
-const CLIENT_ID = "";
-const CLIENT_SECRET = "";
+const CLIENT_ID = process.env.REACT_APP_CLIENT_ID;
+const CLIENT_SECRET = process.env.REACT_APP_CLIENT_SECRET;
 
 function App() {
   const [accessToken, setAccessToken] = useState("");
@@ -64,7 +64,3 @@ function App() {
 }
 
 export default App;
-
-
-
-
