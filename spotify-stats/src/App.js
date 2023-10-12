@@ -91,7 +91,7 @@ function App() {
         },
       })
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         if (!response.status === 200) {
           throw new Error("HTTP status " + response.status);
         }
@@ -106,7 +106,7 @@ function App() {
             Authorization: "Bearer " + token,
           },
         }).then((response) => {
-          console.log(response.data.items);
+          // console.log(response.data.items);
           return setTopSongs(response.data.items);
         });
         axios({
@@ -116,7 +116,7 @@ function App() {
             Authorization: "Bearer " + token,
           },
         }).then((response) => {
-          console.log(response.data.items);
+          // console.log(response.data.items);
           return setTopArtists(response.data.items);
         });
       });
@@ -131,9 +131,9 @@ function App() {
           <Col>
             <Container>
               {topArtists.length > 0 ? <h3>Top Artists</h3> : ""}
-              <ListGroup>
+              <ListGroup as="ol" numbered>
                 {topArtists.map((artist) => (
-                  <ListGroupItem>{artist.name}</ListGroupItem>
+                  <ListGroupItem as="li">{artist.name}</ListGroupItem>
                 ))}
               </ListGroup>
             </Container>
@@ -141,9 +141,9 @@ function App() {
           <Col>
             <Container>
               {topSongs.length > 0 ? <h3>Top Tracks</h3> : ""}
-              <ListGroup>
+              <ListGroup as="ol" numbered>
                 {topSongs.map((songInfo) => (
-                  <ListGroupItem>
+                  <ListGroupItem as="li">
                     {songInfo.name} By{" "}
                     {songInfo.artists.map((artist, i, arr) => (
                       <span>
