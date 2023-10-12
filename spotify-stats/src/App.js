@@ -16,7 +16,6 @@ const CLIENT_ID = process.env.REACT_APP_CLIENT_ID;
 const REDIRECT_URI = process.env.REACT_APP_REDIRECT_URI;
 
 function App() {
-  // const [code, setCode] = useState("");
   const [topSongs, setTopSongs] = useState([]);
   const [topArtists, setTopArtists] = useState([]);
   const generateRandomString = (length) => {
@@ -98,11 +97,9 @@ function App() {
         },
       })
       .then((response) => {
-        // console.log(response);
         if (!response.status === 200) {
           throw new Error("HTTP status " + response.status);
         }
-        // setAccessToken(response.data.access_token);
         return response.data.access_token;
       })
       .then((token) => {
@@ -113,7 +110,6 @@ function App() {
             Authorization: "Bearer " + token,
           },
         }).then((response) => {
-          // console.log(response.data.items);
           return setTopSongs(response.data.items);
         });
         axios({
@@ -123,7 +119,6 @@ function App() {
             Authorization: "Bearer " + token,
           },
         }).then((response) => {
-          console.log(response.data.items);
           return setTopArtists(response.data.items);
         });
       });
