@@ -16,7 +16,7 @@ const CLIENT_ID = process.env.REACT_APP_CLIENT_ID;
 const REDIRECT_URI = process.env.REACT_APP_REDIRECT_URI;
 
 function App() {
-  // const [accessToken, setAccessToken] = useState("");
+  // const [code, setCode] = useState("");
   const [topSongs, setTopSongs] = useState([]);
   const [topArtists, setTopArtists] = useState([]);
   const generateRandomString = (length) => {
@@ -49,6 +49,14 @@ function App() {
 
   let codeVerifier = generateRandomString(128);
 
+  useEffect(() => {
+    if (window.location.href.includes("callback")) {
+      const urlParams = new URLSearchParams(window.location.search);
+      localStorage.setItem("code", urlParams.get("code"));
+      window.location = "http://localhost:3000/stats";
+    }
+  });
+
   const getAuthCode = () => {
     generateCodeChallenge(codeVerifier).then((codeChallenge) => {
       let state = generateRandomString(16);
@@ -71,9 +79,8 @@ function App() {
   };
 
   const getTopSongs = async () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    let code = urlParams.get("code");
-
+    
+    let code = localStorage.getItem("code");
     let verifier = localStorage.getItem("code_verifier");
 
     let data = qs.stringify({
@@ -116,7 +123,7 @@ function App() {
             Authorization: "Bearer " + token,
           },
         }).then((response) => {
-          // console.log(response.data.items);
+          console.log(response.data.items);
           return setTopArtists(response.data.items);
         });
       });
@@ -133,7 +140,7 @@ function App() {
               {topArtists.length > 0 ? <h3>Top Artists</h3> : ""}
               <ListGroup as="ol" numbered>
                 {topArtists.map((artist) => (
-                  <ListGroupItem as="li">{artist.name}</ListGroupItem>
+                  <ListGroupItem as="li" key={artist.id}>{artist.name}</ListGroupItem>
                 ))}
               </ListGroup>
             </Container>
@@ -143,10 +150,10 @@ function App() {
               {topSongs.length > 0 ? <h3>Top Tracks</h3> : ""}
               <ListGroup as="ol" numbered>
                 {topSongs.map((songInfo) => (
-                  <ListGroupItem as="li">
+                  <ListGroupItem key={songInfo.id}>
                     {songInfo.name} By{" "}
                     {songInfo.artists.map((artist, i, arr) => (
-                      <span>
+                      <span key={i}>
                         {artist.name}
                         {i !== arr.length - 1 ? ", " : ""}
                       </span>
